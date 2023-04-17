@@ -1,0 +1,2 @@
+git restore filename will discard all changes before committing.
+git restore --staged will discard all changes before usi[A[A[C[B[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Dgit add'
