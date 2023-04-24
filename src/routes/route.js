@@ -6,7 +6,6 @@ const router = express.Router();
 
 router.get('/movies', function(req,res){
     let movi=["Rang de basanti", "The shining" ,"Lord of the rings", "Batman begins"];
-
     res.send(movi);
 });
 
