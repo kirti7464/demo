@@ -2,54 +2,59 @@ const express = require('express');
 const { route } = require('express/lib/application');
 const router = express.Router();
 
+let players =
+   [
+       {
+           "name": "manish",
+           "dob": "1/1/1995",
+           "gender": "male",
+           "city": "jalandhar",
+           "sports": [
+               "swimming"
+           ]
+       },
+       {
+           "name": "gopal",
+           "dob": "1/09/1995",
+           "gender": "male",
+           "city": "delhi",
+           "sports": [
+               "soccer"
+           ],
+       },
+       {
+           "name": "lokesh",
+           "dob": "1/1/1990",
+           "gender": "male",
+           "city": "mumbai",
+           "sports": [
+               "soccer"
+           ],
+       },
+   ]
 
 
-router.get('/movies', function(req,res){
-    let movi=["Rang de basanti", "The shining" ,"Lord of the rings", "Batman begins"];
-    res.send(movi);
-});
-
-router.get("/movies/:indexNumber", function (req, res) {
-  let movi = [
-    "Rang de basanti",
-    "The shining",
-    "Lord of the rings",
-    "Batman begins",
-  ];
-
-  if (req.params.indexNumber > -1 && req.params.indexNumber < movi.length) 
-  {
-    res.send(movi[req.params.indexNumber]);
-  } 
-  else 
-  {
-    res.send("Use a valid index number");
-  }
-});
-router.get("/films", function (req,res) {
-    let film=[{"id":1,"name":"The Shining"},{"id":2,"name":"Incendies"},{"id":3,"name":"Rang de Basanti"},{"id":4,"name":"Finding Nemo"}];
-    res.send(film);
-});
-
-router.get("/films/:filmId",function(req,res){
-    let film=[{"id":1,"name":"The Shining"},{"id":2,"name":"Incendies"},{"id":3,"name":"Rang de Basanti"},{"id":4,"name":"Finding Nemo"}];
-    for(let i=0;i<film.length;i++)
+   router.post('/players', function (req, res) {
+    //LOGIC WILL COME HERE
+    let body=req.body;
+    let x=[];
+    for(let i=0;i<players.length;i++)
     {
-        let per=film[i];
-        if(per.id==req.params.filmId)
+        curr=players[i];
+        if(Object.values(curr).includes(curr.name)!=body.name)
         {
-            res.send(per);
-        }
-        else
-        {
-            res.send("No movie exists with this id");
+            x.push(curr.name);
         }
     }
     
-});
-router.get('/test-you', function (req, res) {
-    
-    res.send('Hello there, welcome to this application!')
-});
-
+    if(x.includes(body.name)!=true)
+    {
+        players.push(body);
+    }
+    else
+    {
+        res.send("This person already exists");
+    }
+    res.send(  { data: players , status: true }  );
+})
 module.exports = router;
