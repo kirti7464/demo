@@ -20,13 +20,12 @@ app.get("/sol1", function (req, res) {
     let arr= [1,2,3,5,6,7]
     let missingNumber;
     let sum=0;
-    n=arr[arr.length-1];
+    n=(arr[arr.length-1]-arr[0])+1;
     for(let i=0;i<arr.length;i++)
     {
         sum=sum+arr[i];
     }
     missingNumber=((n*(n+1))/2)-sum;
-
     ///LOGIC WILL GO HERE 
 
     res.send(  { data: missingNumber  }  );
@@ -39,7 +38,7 @@ app.get("/sol2", function (req, res) {
     let sum=0;
     let first=arr[0];
     let last=arr[arr.length-1];
-    n=last-first+1;
+    let n=last-first+1;
     for(let i=0;i<arr.length;i++)
     {
         sum=sum+arr[i];
