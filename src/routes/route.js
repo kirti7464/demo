@@ -8,17 +8,10 @@ router.get("/test-me", function (req, res) {
 })
 
 router.post("/createBook", bookController.createBook  )
+router.post("/createAuthor", bookController.createAuthor  )
+router.get("/getBookByAuthor", bookController.getBookByAuthor)
+router.get("/getParticularAuthor", bookController.getParticularAuthor);
+router.get("/getAuthorByCost", bookController.getAuthorByCost)
 
-router.get("/getBook", bookController.getBook)
-
-router.get("/getList", bookController.getList)
-
-router.post("/getBooksInYear", bookController.getBooksInYear);
-
-router.post("/getParticularBooks", bookController.getParticularBooks);
-
-router.get("/getXINRBooks", bookController.getXINRBooks)
-
-router.get("/getRandomBooks", bookController.getRandomBooks)
 
 module.exports = router;
