@@ -1,43 +1,64 @@
-const bookModel= require("../models/bookModels");
-const authorModel= require("../models/authorModels.js");
+
+const authorModel= require("../models/newAuthorModels.js");
+const publisherModel= require("../models/newPublisherModels.js");
+const bookModel= require("../models/newBookModels.js");
+
+const createAuthor= async function (req, res) {
+    let data= req.body;
+    let savedData= await authorModel.create(data);
+    res.send({msg: savedData})
+}
+
+const createPublisher= async function (req, res) {
+    let data= req.body;
+    let savedData= await publisherModel.create(data);
+    res.send({msg: savedData})
+}
 
 const createBook= async function (req, res) {
-    let data= req.body
-    let savedData= await bookModel.create(data)
-    res.send({msg: savedData})
-}
-const createAuthor= async function (req, res) {
-    let data= req.body
-    let savedData= await authorModel.create(data)
-    res.send({msg: savedData})
-}
-
-const getBookByAuthor= async function (req, res) {
-    let Book= await authorModel.find({author_name:{$eq:"Chetan Bhagat"}})
-    let x= Book.map(x=>x.author_id);
-    let result= await bookModel.find({author_id:x}).select({name:1,_id:0})
-    res.send({msg: result})
-}
-const getParticularAuthor= async function (req, res) {
-    let Author= await bookModel.findOneAndUpdate({name:"Two states"},{
-        $set:{price:100}
-    });
-    let result= await authorModel.find({author_id:{ $eq:Author.author_id}}).select({author_name:1,_id:0});
-    result.push({"updated_Price":Author.price});
-    res.send(result)
+    const data= req.body; 
+    if (data.author) {
+      if (data.publisher) {
+        let authId = await authorModel.findById(data.author);
+        let pubId = await publisherModel.findById(data.publisher);
+        if (authId) {
+          if (pubId) {
+            let result = await bookModel.create(data);
+            res.send(result);
+          } else {
+            res.send("Publisher is not present");
+          }
+        } else {
+          res.send("Author is not present");
+        }
+      } else {
+        res.send("Publisher Id is required");
+      }
+    } else {
+      res.send("Author Id is required");
+    }
 }
 
-const getAuthorByCost= async function (req, res) {
-  
-  let author= await bookModel.find({  price : {$gte: 50, $lte: 100}   });
-  let x=author.map(x=>x.author_id)
-  let result= await authorModel.find({author_id:x}).select({author_name:1,_id:0});
-  res.send(result);
+const getAllBooks =async function(req,res)
+{
+    let books= await bookModel.find().populate('author').populate('publisher');
+    res.send(books);
 }
 
 
-module.exports.createBook= createBook;
+const updateBooks =async function(req,res)
+{
+    let pubName= await publisherModel.find({name:{$in:["Penguin","HarperCollins"]}});
+    let updBook= await bookModel.updateMany({publisher_id:pubName._id},{$set:{isHardCover:true}},{new:true});
+    //  For the books written by authors having a rating greater than 3.5, update the books price by 10 (For eg if old price for such a book is 50, new will be 60)
+    let authName = await authorModel.find({rating :{$gt:"3.5"}}).select({_id:1})
+    let updPrice= await bookModel.updateMany({author:authName},{$inc:{price:10}},{new:true});//inc for increase
+    res.send(updPrice);
+}
+module.exports.createPublisher= createPublisher;
 module.exports.createAuthor =createAuthor;
-module.exports.getBookByAuthor= getBookByAuthor;
-module.exports.getParticularAuthor = getParticularAuthor;
-module.exports.getAuthorByCost= getAuthorByCost;
+module.exports.createBook= createBook;
+module.exports.getAllBooks= getAllBooks;
+module.exports.updateBooks=updateBooks;
+
+
