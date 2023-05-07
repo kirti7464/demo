@@ -1,8 +1,28 @@
 
 const mid1= function ( req, res, next) {
-    req.falana= "hi there. i am adding something new to the req object"
-    console.log("Hi I am a middleware named Mid1")
-    next()
+    let isFreeAppUser= req.headers.isfreeappuser
+    
+    if(isFreeAppUser)
+    {
+        if(isFreeAppUser==true)
+        {
+            req.body.isFreeAppUser=true;
+            console.log("MID1 middleware is working for true value of isFreeAppUser");
+            next();
+        }
+        else
+        {
+            req.body.isFreeAppUser=false;
+            console.log("MID1 middleware is working for false value of isFreeAppUser");
+            next();
+
+        }
+        console.log("MID1 middleware is working");  
+    }
+    else
+    {
+        console.log("error");       
+    }
 }
 
 const mid2= function ( req, res, next) {
