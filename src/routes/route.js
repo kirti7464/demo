@@ -15,6 +15,5 @@ router.get("/users/:userId",commonMidd.authenticate,commonMidd.authorise, userCo
 router.delete("/users/:userId",commonMidd.authenticate,commonMidd.authorise,  userController.delUser)
 
 router.put("/users/:userId",commonMidd.authenticate,commonMidd.authorise,  userController.updateUser)
-// router.delete('/users/:userId', userController.deleteUser)
 
 module.exports = router;

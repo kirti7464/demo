@@ -6,16 +6,19 @@ const authenticate = function(req, res, next) {
     if(token)
     {
       let decodedToken= jwt.verify(token, "secret-key");
-      if(decodedToken){
+      try{if(decodedToken){
+        req.user=decodedToken;
         next();
+
+      }}
+      catch(er){
+        return res.status(401).send({msg:"Invalid token"});
       }
-      else{
-        res.send("Invalid token");
-      }
+      
 
     }
     else{
-      res.send("token is required");
+       return res.send("token is required");
     }
 
 }
@@ -23,16 +26,15 @@ const authenticate = function(req, res, next) {
 
 const authorise = function(req, res, next) {
     // comapre the logged in user's id and the id in request
-    let userId = req.params.userId;
-    
-    let decodedToken= jwt.verify(req.headers["x-auth-token"],"secret-key");
-    if(userId==decodedToken.userId)
+    let userId= req.params.userId;
+    // console.log(decodedToken);
+    try{if(userId==req.user.userId)
     {
       console.log("Authorised");
       next()
-    }
-    else{
-      res.send("Not authorised");
+    }}
+    catch(er){
+      return res.status(403).send("Not authorised");
     }
 }
 module.exports.authenticate=authenticate;
